@@ -15,6 +15,20 @@ class SearchScreen extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: TextField(),
           ),
+          Flexible(
+            child: ListView.builder(
+              itemBuilder: (BuildContext context, int index) {
+                return ListTile(
+                  leading: Text("Location Icon"),
+                  title: Text("City/District Name $index"),
+                  onTap: () {
+                    print('Selected City Index $index');
+                  },
+                );
+              },
+              itemCount: 20,
+            ),
+          )
         ],
       ),
     );
