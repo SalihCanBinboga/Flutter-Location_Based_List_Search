@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_location_based_search/ui/screen/SearchScreen.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -7,18 +8,18 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text("Home Page"),
       ),
-      body: Container(
-        child: Center(
-          child: RaisedButton(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            onPressed: () => {},
-            color: Colors.blueAccent,
-            child: Text(
-              "Arama Sayfası",
-              style: TextStyle(color: Colors.white),
-            ),
+      body: Center(
+        child: RaisedButton(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          onPressed: () => {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => SearchScreen())),
+          },
+          color: Colors.blueAccent,
+          child: Text(
+            "Arama Sayfası",
+            style: TextStyle(color: Colors.white),
           ),
         ),
       ),
