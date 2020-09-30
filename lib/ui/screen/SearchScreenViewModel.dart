@@ -42,12 +42,18 @@ class SearchScreenViewModel with ChangeNotifier {
       _searchResultList.clear();
 
       cityDistrictList.forEach((element) {
-        if (element.cityName.toLowerCase().contains(searchText) || element.cityName.toUpperCase().contains(searchText)) {
+        String lowerText = element.cityName.toLowerCase();
+        String upperText = element.cityName.toUpperCase();
+
+        if (lowerText.contains(searchText.toLowerCase()) || upperText.contains(searchText.toUpperCase())) {
           _searchResultList.add(element.cityName);
         }
 
         element.districtList.forEach((district) {
-          if (district.toLowerCase().contains(searchText) || district.toUpperCase().contains(searchText)) {
+          String _lowerText = district.toLowerCase();
+          String _upperText = district.toUpperCase();
+
+          if (_lowerText.contains(searchText.toLowerCase()) || _upperText.contains(searchText.toUpperCase())) {
             _searchResultList.add("${element.cityName}/$district");
           }
         });
