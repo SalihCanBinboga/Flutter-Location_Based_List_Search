@@ -14,7 +14,9 @@ class HomeScreen extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
           ),
           onPressed: () => {
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => SearchScreen())),
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => SearchScreen())).then(
+                  (value) => print('Seçilen Konum $value'),
+                ),
           },
           color: Colors.blueAccent,
           child: Text(
