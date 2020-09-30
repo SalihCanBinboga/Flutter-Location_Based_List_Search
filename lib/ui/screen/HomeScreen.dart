@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_location_based_search/ui/components/CustomAlertDialog.dart';
 import 'package:flutter_location_based_search/ui/screen/SearchScreen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -15,7 +16,7 @@ class HomeScreen extends StatelessWidget {
           ),
           onPressed: () => {
             Navigator.of(context).push(MaterialPageRoute(builder: (context) => SearchScreen())).then(
-                  (value) => print('Seçilen Konum $value'),
+                  (value) => showCustomDialog(value,context),
                 ),
           },
           color: Colors.blueAccent,
@@ -26,5 +27,14 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  showCustomDialog(value, BuildContext context) {
+    CustomAlertDialog(
+      context: context,
+      buttonType: DialogButtonType.SINGLE_BUTTON,
+      title: "Seçilen Konum",
+      description: Text("Seçilen Konum: $value"),
+    ).show();
   }
 }
