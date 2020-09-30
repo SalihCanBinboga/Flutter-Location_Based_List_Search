@@ -59,8 +59,6 @@ class SearchScreenViewModel with ChangeNotifier {
         });
       });
 
-      _searchResultList.sort();
-
       _state = SearchState.Seached;
       notifyListeners();
     }
