@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_location_based_search/ui/components/CustomAlertDialog.dart';
 import 'package:flutter_location_based_search/ui/screen/SearchScreen.dart';
-import 'package:speech_to_text/speech_to_text.dart';
+import 'package:speech_to_text/speech_recognition_error.dart';
+import 'package:speech_to_text/speech_recognition_result.dart';
+import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -9,6 +11,16 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  stt.SpeechToText _sttInstance;
+  bool isStartListen = false;
+  String _listenResult = "Listen Result";
+
+  @override
+  void initState() {
+    super.initState();
+    _sttInstance = stt.SpeechToText();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,8 +49,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             FlatButton(
               onPressed: () => _startListening(),
-              child: Text("Sesi Dinle"),
-            )
+              child: Text(isStartListen ? "Dinlemeyi Durdur" : "Dinlemeye Başla"),
+            ),
+            Text(_listenResult)
           ],
         ),
       ),
@@ -54,7 +67,30 @@ class _HomeScreenState extends State<HomeScreen> {
     ).show();
   }
 
-  _startListening() {
+  _startListening() async {
+    if (!isStartListen) {
+      bool speechInit = await _sttInstance.initialize(onStatus: (String status) {
+        print('onStatus: $status');
+      }, onError: (SpeechRecognitionError error) {
+        print('onError ${error.errorMsg}');
+      });
 
+      if (speechInit) {
+        setState(() => isStartListen = true);
+
+        _sttInstance.listen(
+          onResult: (SpeechRecognitionResult result) {
+            setState(() {
+              _listenResult = result.recognizedWords;
+            });
+          },
+        );
+      }
+    } else {
+      setState(() {
+        isStartListen = false;
+        _sttInstance.stop();
+      });
+    }
   }
 }
