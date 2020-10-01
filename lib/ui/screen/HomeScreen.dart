@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_location_based_search/ui/components/CustomAlertDialog.dart';
 import 'package:flutter_location_based_search/ui/screen/SearchScreen.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -10,20 +15,30 @@ class HomeScreen extends StatelessWidget {
         title: Text("Home Page"),
       ),
       body: Center(
-        child: RaisedButton(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          onPressed: () => {
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => SearchScreen())).then(
-                  (value) => showCustomDialog(value,context),
-                ),
-          },
-          color: Colors.blueAccent,
-          child: Text(
-            "Arama Sayfası",
-            style: TextStyle(color: Colors.white),
-          ),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            RaisedButton(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              onPressed: () => {
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => SearchScreen())).then(
+                      (value) => showCustomDialog(value, context),
+                    ),
+              },
+              color: Colors.blueAccent,
+              child: Text(
+                "Arama Sayfası",
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+            FlatButton(
+              onPressed: () => _startListening(),
+              child: Text("Sesi Dinle"),
+            )
+          ],
         ),
       ),
     );
@@ -36,5 +51,9 @@ class HomeScreen extends StatelessWidget {
       title: "Seçilen Konum",
       description: Text("Seçilen Konum: $value"),
     ).show();
+  }
+
+  _startListening() {
+
   }
 }
