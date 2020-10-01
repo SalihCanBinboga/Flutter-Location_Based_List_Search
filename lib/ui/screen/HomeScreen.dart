@@ -99,21 +99,31 @@ class _HomeScreenState extends State<HomeScreen> {
   void setFilter(String recognizedWords) async {
     var response = await http.get("https://raw.githubusercontent.com/ooguz/turkce-kufur-karaliste/master/karaliste.json");
     List<String> slangList = List();
+    String newText = "";
+    String selectedWord = "";
+    bool isSlangs = false;
 
     if (response.statusCode == 200) {
       slangList.addAll((json.decode(response.body) as List).map((e) => e.toString()).toList());
     }
 
-    String newText = "";
-
-    recognizedWords.split(" ").forEach((listenTextWord) {
-      slangList.forEach((slangWord) {
-        listenTextWord.contains(slangWord) ? newText += "" : newText += " $listenTextWord";
+    recognizedWords.split(" ").forEach((String singleWord) {
+      slangList.forEach((singleSlang) {
+        if (singleWord.toLowerCase() == singleSlang.toLowerCase()) {
+          isSlangs = true;
+        } else {
+          isSlangs ? selectedWord = "*****" : selectedWord = singleWord;
+        }
       });
+
+      isSlangs = false;
+      newText += "$selectedWord ";
+      selectedWord = "";
     });
 
     setState(() {
       _listenResult = newText;
+      isStartListen = false;
     });
   }
 }
