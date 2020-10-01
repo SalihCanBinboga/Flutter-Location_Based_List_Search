@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_location_based_search/ui/components/CustomAlertDialog.dart';
 import 'package:flutter_location_based_search/ui/screen/SearchScreen.dart';
 import 'package:speech_to_text/speech_recognition_error.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
+import 'package:http/http.dart' as http;
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -77,11 +80,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
       if (speechInit) {
         setState(() => isStartListen = true);
-
         _sttInstance.listen(
           onResult: (SpeechRecognitionResult result) {
             setState(() {
-              _listenResult = result.recognizedWords;
+              setFilter(result.recognizedWords);
             });
           },
         );
@@ -92,5 +94,26 @@ class _HomeScreenState extends State<HomeScreen> {
         _sttInstance.stop();
       });
     }
+  }
+
+  void setFilter(String recognizedWords) async {
+    var response = await http.get("https://raw.githubusercontent.com/ooguz/turkce-kufur-karaliste/master/karaliste.json");
+    List<String> slangList = List();
+
+    if (response.statusCode == 200) {
+      slangList.addAll((json.decode(response.body) as List).map((e) => e.toString()).toList());
+    }
+
+    String newText = "";
+
+    recognizedWords.split(" ").forEach((listenTextWord) {
+      slangList.forEach((slangWord) {
+        listenTextWord.contains(slangWord) ? newText += "" : newText += " $listenTextWord";
+      });
+    });
+
+    setState(() {
+      _listenResult = newText;
+    });
   }
 }
